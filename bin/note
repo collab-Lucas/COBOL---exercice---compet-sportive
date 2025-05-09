@@ -1,0 +1,63 @@
+ath    resultats_points.
+       OPEN INPUT fa
+       MOVE 0 TO Wfin
+       PERFORM WITH TEST AFTER UNTIL Wfin = 1
+        READ fa NEXT
+        AT END MOVE 1 TO Wfin 
+        NOT AT END
+          MOVE 0 TO Wpoints
+          MOVE 0 TO Winitial
+          MOVE 0 TO Wsprint
+          MOVE 0 TO Wpoursuite
+          MOVE 0 TO Wmassstart
+          OPEN INPUT fp
+          MOVE 0 TO Wtrouver
+          MOVE fa_numA TO fp_numA
+          START fp, KEY IS = fp_numA
+          INVALID KEY DISPLAY "inexistant"
+          NOT INVALID KEY
+            PERFORM WITH TEST AFTER UNTIL Wtrouver = 1 
+              READ fp NEXT
+              AT END MOVE 1 TO Wtrouver
+              NOT AT END  
+                ADD fp_points TO Wpoints
+                OPEN INPUT fc
+                MOVE 0 TO WtrouverC
+                PERFORM WITH TEST AFTER UNTIL WtrouverC = 0 
+                  MOVE fp_numCo TO fc_numCo
+                  READ fc
+                  INVALID KEY DISPLAY "inexistant"
+                    MOVE 0 To WtrouverC
+                  NOT INVALID KEY DISPLAY fc_numCo
+                    IF fc_typeCo = "INITIAL"
+                      ADD fp_points TO Winitial
+                    END-IF
+                    IF fc_typeCo = "SPRINT"
+                      ADD fp_points TO Wsprint
+                    END-IF
+                    IF fc_typeCo = "POURSUITE"
+                      ADD fp_points TO Wpoursuite
+                    END-IF
+                    IF fc_typeCo = "MASSSTART"
+                      ADD fp_points TO Wmassstart
+                    END-IF
+                    MOVE 0 To WtrouverC
+                  END-READ
+                END-PERFORM
+                CLOSE fc
+              END-READ
+            END-PERFORM
+          END-START
+          CLOSE fp.
+          DISPLAY "numéro:"fa_numA
+          DISPLAY "nom :"fa_nom
+          DISPLAY "prenom :"fa_prenom
+          DISPLAY "points :" Wpoints
+          DISPLAY "points INITIAL:"Winitial    
+          DISPLAY "points SPRINT:"Wsprint 
+          DISPLAY "points POURSUITE:"Wpoursuite 
+          DISPLAY "points MASSSTART:"Wmassstart     
+         END-READ
+       END-PERFORM  
+       CLOSE fa.
+       
